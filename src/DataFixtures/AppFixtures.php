@@ -25,13 +25,15 @@ class AppFixtures extends Fixture
     {
 
         $raw = [
-            ["email"=>"michel@test.com","password"=>"password"]
+            ["email"=>"admin@mail.dev","password"=>"password","is_admin"=>true],
+            ["email"=>"michel@test.com","password"=>"password","is_admin"=>false]
         ];
 
         foreach($raw as $data){
             $user = new User();
             $user->setEmail($data["email"]);
             $user->setPassword($this->hasher->hashPassword($user,$data["password"]));
+            $user->setRoles($data["is_admin"] ? ["ROLE_ADMIN"] : ["ROLE_USER"]);
             $manager->persist($user);
         }
 
