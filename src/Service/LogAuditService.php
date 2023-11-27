@@ -24,6 +24,7 @@ class LogAuditService
     public function logFailure(string $identifier, string $message,string $clientIp): void
     {
         $trace = new Log(null,$identifier,Log::FAIL,$message,$clientIp);
+
         $this->save($trace);
     }
 

@@ -55,7 +55,6 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             ["ROLE_USER"]=>"app_home",
         };
 
-        $this->auditService->logSuccess($token->getUserIdentifier(),$request->getClientIp());
         return new RedirectResponse($this->urlGenerator->generate($redirectUrl));
     }
 
