@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Service\LogAuditService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private readonly LogAuditService $auditService
+    )
     {
     }
 
@@ -51,7 +55,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             ["ROLE_USER"]=>"app_home",
         };
 
-
+        $this->auditService->logSuccess($token->getUserIdentifier());
         return new RedirectResponse($this->urlGenerator->generate($redirectUrl));
     }
 
