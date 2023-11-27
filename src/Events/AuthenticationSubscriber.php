@@ -4,13 +4,10 @@ namespace App\Events;
 
 use App\Service\LogAuditService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\AuthenticationEvents;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\TooManyLoginAttemptsAuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use Symfony\Component\Security\Http\Event\LoginFailureEvent;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
-use Symfony\Component\Security\Http\SecurityEvents;
 
 class AuthenticationSubscriber implements EventSubscriberInterface
 {
@@ -22,11 +19,11 @@ class AuthenticationSubscriber implements EventSubscriberInterface
     {
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             LoginSuccessEvent::class =>"onLoginSuccess",
-            LoginFailureEvent::class =>"onLoginFailure"
+            LoginFailureEvent::class =>"onLoginFailure",
         ];
     }
 
@@ -37,20 +34,17 @@ class AuthenticationSubscriber implements EventSubscriberInterface
 
     public function onLoginFailure(LoginFailureEvent $event): void
     {
-
-        $identifier = $event->getException()->getPrevious() instanceof UserNotFoundException
-            ? "Unregistered User"
-            : $event->getPassport()->getUser()->getUserIdentifier() ;
+        $message = $event->getException()->getMessage();
+        if($event->getException() instanceof TooManyLoginAttemptsAuthenticationException){
+            $message = "Too many login attempts";
+        }
 
         $this->service->logFailure(
-            $identifier,
-            $event->getException()->getMessage(),
+            $event->getRequest()->get('email'),
+            $message,
             $event->getRequest()->getClientIp(),
         );
 
     }
-
-
-
 
 }
