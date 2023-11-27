@@ -15,15 +15,15 @@ class LogAuditService
     {
     }
 
-    public function logSuccess(string $identifier): void
+    public function logSuccess(string $identifier,string $clientIp): void
     {
-        $trace = new Log(null,$identifier,Log::SUCCESS,"Authenticated successfully");
+        $trace = new Log(null,$identifier,Log::SUCCESS,"Authenticated successfully",$clientIp);
         $this->save($trace);
     }
 
-    public function logFailure(string $identifier, string $message): void
+    public function logFailure(string $identifier, string $message,string $clientIp): void
     {
-        $trace = new Log(null,$identifier,Log::FAIL,$message);
+        $trace = new Log(null,$identifier,Log::FAIL,$message,$clientIp);
         $this->save($trace);
     }
 

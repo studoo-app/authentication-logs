@@ -31,19 +31,24 @@ class Log
     #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $clientIp = null;
+
+
     /**
      * @param int|null $id
      * @param string|null $user
      * @param string|null $status
      * @param string|null $message
      */
-    public function __construct(?int $id, ?string $user, ?string $status, ?string $message)
+    public function __construct(?int $id, ?string $user, ?string $status, ?string $message,?string $clientIp)
     {
         $this->id = $id;
         $this->user = $user;
         $this->createdAt = new DateTimeImmutable('now',new \DateTimeZone('Europe/Paris'));
         $this->status = $status;
         $this->message = $message;
+        $this->clientIp = $clientIp;
     }
 
 
@@ -99,4 +104,15 @@ class Log
 
         return $this;
     }
+
+    public function getClientIp(): ?string
+    {
+        return $this->clientIp;
+    }
+
+    public function setClientIp(?string $clientIp): void
+    {
+        $this->clientIp = $clientIp;
+    }
+
 }
