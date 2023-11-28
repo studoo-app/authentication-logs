@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\LogRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,10 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractController
 {
     #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
-    public function index(): Response
+    public function index(LogRepository $repository): Response
     {
         return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'DashboardController',
+            'logs' => $repository->findAll(),
         ]);
     }
 }
