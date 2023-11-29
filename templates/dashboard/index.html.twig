@@ -22,13 +22,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for log in logs %}
+                {% for logArr in logs %}
                     <tr>
-                        <td>{{ log.createdAt | date('d/m/y H:i:s') }}</td>
-                        <td>{{ log.status }}</td>
-                        <td>{{ log.user }}</td>
-                        <td>{{ log.message }}</td>
-                        <td>{{ log.clientIP }}</td>
+                        <td>{{ logArr.date | date('d/m/y H:i:s') }}</td>
+                        <td>{{ logArr.details.status }}</td>
+                        <td>{{ logArr.details.user }}</td>
+                        <td>{{ logArr.details.message }}</td>
+                        <td>{{ logArr.details.clientIp }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

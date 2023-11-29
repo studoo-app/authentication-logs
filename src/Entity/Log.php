@@ -13,25 +13,12 @@ class Log
     const SUCCESS = "SUCCESS";
     const FAIL = "FAIL";
 
-
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $user = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
-    #[ORM\Column(length: 255)]
     private ?string $clientIp = null;
 
 
@@ -41,21 +28,18 @@ class Log
      * @param string|null $status
      * @param string|null $message
      */
-    public function __construct(?int $id, ?string $user, ?string $status, ?string $message,?string $clientIp)
+    public function __construct(?string $user, ?string $status, ?string $message,?string $clientIp)
     {
-        $this->id = $id;
         $this->user = $user;
-        $this->createdAt = new DateTimeImmutable('now',new \DateTimeZone('Europe/Paris'));
         $this->status = $status;
         $this->message = $message;
         $this->clientIp = $clientIp;
     }
 
-
-    public function getId(): ?int
-    {
-        return $this->id;
+    public static function buildFromLog(array $array){
+        return new self($array["user"],$array["status"],$array["message"],$array["clientIp"]);
     }
+
 
     public function getUser(): ?string
     {
@@ -65,18 +49,6 @@ class Log
     public function setUser(string $user): static
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -113,6 +85,11 @@ class Log
     public function setClientIp(?string $clientIp): void
     {
         $this->clientIp = $clientIp;
+    }
+
+    public function toArray(): array
+    {
+        return get_object_vars($this);
     }
 
 }
