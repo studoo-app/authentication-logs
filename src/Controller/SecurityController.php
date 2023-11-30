@@ -32,13 +32,13 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        if($error){
-            $message = $error instanceof TooManyLoginAttemptsAuthenticationException
-                ? "Too many login attempts"
-                : $error->getMessage();
-
-           $this->auditService->logFailure($lastUsername,$message,$request->getClientIp());
-        }
+//        if($error){
+//            $message = $error instanceof TooManyLoginAttemptsAuthenticationException
+//                ? "Too many login attempts"
+//                : $error->getMessage();
+//
+//           $this->auditService->logFailure($lastUsername,$message,$request->getClientIp());
+//        }
 
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
